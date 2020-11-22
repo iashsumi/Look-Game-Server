@@ -31,9 +31,18 @@
 set :output, "log/crontab.log"
 set :runner_command, "rails runner"
 
-# まとめ情報作成
+
 every 1.hours do
   runner "Tasks::Board::Exec.rescue_execute"
+end
+
+every 1.hours do
+  runner "Tasks::Board::Backup.rescue_execute"
+end
+
+# まとめ情報作成
+every 1.hours do
+  runner "Tasks::Article::Tmp.rescue_execute"
 end
 
 # YouTube RSS

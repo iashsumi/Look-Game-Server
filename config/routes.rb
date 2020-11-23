@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :sc_threads, only: [:index, :show]
     resources :dashboard, only: [:index]
     resources :articles, only: [:index, :show]
+    post "articles/search"  => "articles#search"
     resources :ranking, only: [:index]
   end
 end

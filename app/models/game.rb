@@ -3,6 +3,7 @@
 class Game < ApplicationRecord
   has_many :game_commentators
   has_many :commentators, through: :game_commentators
+  has_many :articles
 
   enum kind: {
     fc: 0,

@@ -134,7 +134,7 @@ class Tasks::Article::Create < Tasks::Base
     def build_new_image_path(client, article, path)
       tmp_image = open(path)
       # imgur.comはno imageの場合,StringIOになるので除外(他はわからないがほとんどimgur.comなので一旦これで)
-      if tmp_image.class == "StringIO"
+      if tmp_image.class.to_s == "StringIO"
         return "NoImage"
       end
       image_key = Digest::SHA256.hexdigest(path)

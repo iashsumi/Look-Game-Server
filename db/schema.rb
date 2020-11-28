@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 202011231111916) do
+ActiveRecord::Schema.define(version: 202011281111916) do
 
   create_table "articles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 202011231111916) do
     t.text "image_paths", comment: "画像パス一覧"
     t.boolean "is_published", default: false, comment: "公開するかどうか"
     t.boolean "is_check", default: false, comment: "自分で内容をチェックしたかどうか"
+    t.text "exclusion_number", comment: "除外したいレスのNo(半角数字のカンマ区切り)"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_articles_on_game_id"

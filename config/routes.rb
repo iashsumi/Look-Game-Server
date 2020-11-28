@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   scope :api do
     resources :commentators, only: [:index, :show]
-    resources :videos, only: [:index]
+    resources :videos, only: [:index, :show]
     resources :sc_threads, only: [:index, :show]
     resources :dashboard, only: [:index]
     resources :articles, only: [:index, :show]

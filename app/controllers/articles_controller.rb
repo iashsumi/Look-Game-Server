@@ -2,7 +2,7 @@
 
 class ArticlesController < ApplicationController
   def index
-    articles = Article.includes(:sc_thread).where(is_published: true).order('sc_threads.thread_created_at desc').page(params[:page])
+    articles = Article.includes(:sc_thread).where(is_published: true).order(id: "DESC").page(params[:page])
     render json: Articles::IndexViewModel.new(articles).to_json
   end
 

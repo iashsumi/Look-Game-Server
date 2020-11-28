@@ -13,6 +13,7 @@ class Articles::ShowViewModel
       sc_thread: @article.sc_thread,
       key_word: @article.key_word,
       thumbnail_url: @article.thumbnail_url,
+      exclusion_number: @article.exclusion_number,
       created_at: @article.created_at.strftime("%Y/%m/%d %H:%M:%S"),
       updated_at: @article.updated_at.strftime("%Y/%m/%d %H:%M:%S"),
       relations: @article.game.articles.limit(10),

@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
 class Ranking::IndexViewModel
-  def initialize(today_summary, prev_summary)
-    @today_summary = today_summary
-    @prev_summary = prev_summary
+  def initialize(summary)
+    @summary = summary
   end
 
   def to_json
-    {
-      today: fetch_summary(@today_summary),
-      yesterday: fetch_summary(@prev_summary)
-    }
+    fetch_summary(@summary)
   end
 
   private
     def fetch_summary(summary)
+      games = Game.where(id: summary.map(&:id)).to_a
       summary.map do |item|
+        game = games.find{|i| i.id == item.id }
         {
-          title: item.title,
+          game: game,
           count: item.count
         }
       end

@@ -41,8 +41,12 @@ every 1.hours do
 end
 
 # まとめ情報作成
-every 1.hours do
-  runner "Tasks::Article::Tmp.rescue_execute"
+every 30.minute do
+  runner "Tasks::Article::Create.rescue_execute"
+end
+
+every 1.day, :at => '7:00' do
+  runner "Tasks::Article::Delete.rescue_execute"
 end
 
 # YouTube RSS

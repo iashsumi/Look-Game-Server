@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 202012131111918) do
+ActiveRecord::Schema.define(version: 202012131111919) do
 
   create_table "articles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 202012131111918) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "game_id"
+    t.boolean "is_create_article", comment: "記事作成済かどうか"
     t.index ["game_id"], name: "index_sc_threads_on_game_id"
     t.index ["sc_board_id"], name: "index_sc_threads_on_sc_board_id"
   end

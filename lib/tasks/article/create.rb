@@ -18,7 +18,7 @@ class Tasks::Article::Create < Tasks::Base
       if target.blank?
         # キーワード取得(ラベリング済)
         limit = Configuration.all.first.value.to_i
-        target = ScThreadKeyword.where.not(word: NgWord.kind_keyword.pluck(:word)).eager_load(:sc_thread).merge(ScThread.labeling).merge(ScThread.range(from, to).where(is_backup: true, is_completed: true).where.not(id: Article.all.pluck(:id))).limit(limit)
+        target = ScThreadKeyword.where.not(word: NgWord.kind_keyword.pluck(:word)).eager_load(:sc_thread).merge(ScThread.labeling).merge(ScThread.range(from, to).where(is_backup: true, is_completed: true, is_create_article: false).where.not(id: Article.all.pluck(:id))).limit(limit)
       end
 
       key_words = []
@@ -65,8 +65,11 @@ class Tasks::Article::Create < Tasks::Base
         end
 
         # データ作成
-        next if NgWord.all.pluck(:word).include?(obj.word)
+        next if NgWord.all.pluck(:word).include?(obj.word)       
         article = Article.find_or_create_by(game: obj.sc_thread.game, sc_thread: obj.sc_thread, key_word: obj.word)
+        sc_thread = obj.sc_thread
+        sc_thread.is_create_article = true
+        sc_thread.save!
         # 公開済のものは編集しない
         next if article.is_published
         next if article.errors.present?

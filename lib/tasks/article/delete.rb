@@ -9,7 +9,9 @@ require "addressable/uri"
 class Tasks::Article::Delete < Tasks::Base
   class << self
     # Article、dynamoDB、S3の画像と記事を削除
-    def execute(target)
+    def execute(target = nil)
+      # 12月2日以前は削除
+      target = Article.where(is_published: false).where('created_at <= ?', Date.new(2020, 12, 2)) if target.blank?
       client = S3.new
       d_client = Dynamo.new if Rails.env != "development"
       target.each do |article|

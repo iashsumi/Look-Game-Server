@@ -17,7 +17,8 @@ class Games::ShowViewModel
       developer: @game.developer,
       tweet: @game.tweet,
       twitter_account_id: @game.twitter_account_id,
-      videos: @game.videos
+      videos: @game.videos,
+      tags: Article.where(game_id: @game.id, is_published: true).group(:key_word).select('key_word as word, count(*) as count')
     }
   end
 

@@ -13,8 +13,8 @@ class ArticlesController < ApplicationController
 
   def search
     key_word = params[:key_word]
-    relation = Article.includes(:sc_thread).eager_load(:game)
-    articles = relation.where(is_published: true).merge(Game.where(title_min: key_word)).or(relation.where(key_word: key_word)).order('sc_threads.thread_created_at desc').page(params[:page])
+    relation = Article.includes(:sc_thread).eager_load(:game).where(is_published: true)
+    articles = relation.merge(Game.where(title_min: key_word)).or(relation.where(key_word: key_word)).order('sc_threads.thread_created_at desc').page(params[:page])
     render json: Articles::IndexViewModel.new(articles).to_json
   end
 end

@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     resources :articles, only: [:index, :show]
     post "articles/search"  => "articles#search"
     resources :ranking, only: [:index]
+    resources :games, only: [:index, :show]
+    post "games/search"  => "games#search"
   end
 end

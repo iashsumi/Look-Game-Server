@@ -14,7 +14,7 @@ class Tasks::Article::Delete < Tasks::Base
       d_client = Dynamo.new if Rails.env != "development"
       target.each do |article|
         ActiveRecord::Base.transaction do
-          client.delete_object(article.id.to_s)
+          client.delete_object("matome/#{article.id}")
           client.delete_folder("matome/#{article.id}", "look-at-this-game-public")
           d_client.delete_item("matome-#{article.id}") if Rails.env != "development"
           article.delete

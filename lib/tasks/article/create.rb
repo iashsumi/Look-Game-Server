@@ -65,6 +65,7 @@ class Tasks::Article::Create < Tasks::Base
         end
 
         # データ作成
+        next if NgWord.all.pluck(:word).include?(obj.word)
         article = Article.find_or_create_by(game: obj.sc_thread.game, sc_thread: obj.sc_thread, key_word: obj.word)
         # 公開済のものは編集しない
         next if article.is_published
@@ -103,6 +104,7 @@ class Tasks::Article::Create < Tasks::Base
           comment.strip!
           comments << comment if comment.length <= 30
         end
+        next if images.include?("NoImage")
 
         # S3にアップ
         client.put_object("matome/#{article.id}", JSON.dump(matome))
@@ -113,17 +115,6 @@ class Tasks::Article::Create < Tasks::Base
         article.thumbnail_url = images.first
         article.is_published = (emoji_contained?(article.title) || comments.first.blank? || Article.where(sc_thread: obj.sc_thread, is_published: true).present?) ? false : true
         article.save
-
-        # OGP対応
-        # 未公開はOGP対応しない
-        next unless article.is_published
-
-        if Rails.env != "development"
-          d_client = Dynamo.new
-          next if d_client.get_item("matome-#{article.id}").present?
-          d_params = { id: "matome-#{article.id}", title: article.title, description: "#{article.game.title}(#{article.game.title_min})の#{article.key_word}に関する情報をまとめました。", image_path: "https://www.latg.site/matome_images/#{article.id}/#{article.thumbnail_url}" }
-          d_client.update_item(d_params)
-        end
       end
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 202011281111916) do
+ActiveRecord::Schema.define(version: 202012131111918) do
 
   create_table "articles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 202011281111916) do
     t.text "exclusion_number", comment: "除外したいレスのNo(半角数字のカンマ区切り)"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "show_count", default: 0, comment: "閲覧数"
     t.index ["game_id"], name: "index_articles_on_game_id"
     t.index ["sc_thread_id"], name: "index_articles_on_sc_thread_id"
   end
@@ -52,6 +53,13 @@ ActiveRecord::Schema.define(version: 202011281111916) do
     t.index ["game_id"], name: "index_game_commentators_on_game_id"
   end
 
+  create_table "game_kinds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "game_id"
+    t.integer "kind", comment: "機種"
+    t.datetime "release_date_at", null: false, comment: "発売日"
+    t.index ["game_id"], name: "index_game_kinds_on_game_id"
+  end
+
   create_table "games", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title", comment: "ゲームタイトル"
     t.string "title_min", comment: "タイトルの省略形"
@@ -60,6 +68,12 @@ ActiveRecord::Schema.define(version: 202011281111916) do
     t.string "publisher", comment: "販売元"
     t.text "description", comment: "説明"
     t.string "thumbnail", comment: "ゲームのサムネ"
+    t.text "tweet", comment: "ツイートのID"
+    t.string "twitter_account_id", comment: "TwitterのTL用"
+    t.text "developer", comment: "開発元"
+    t.integer "show_count", default: 0, comment: "閲覧数"
+    t.integer "genre", comment: "ジャンル"
+    t.text "videos", comment: "動画情報(カンマ区切り)"
   end
 
   create_table "games_copy", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -76,6 +90,8 @@ ActiveRecord::Schema.define(version: 202011281111916) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "game_id"
+    t.index ["game_id"], name: "index_genres_on_game_id"
   end
 
   create_table "labels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -146,6 +162,7 @@ ActiveRecord::Schema.define(version: 202011281111916) do
     t.index ["commentator_id"], name: "index_videos_on_commentator_id"
   end
 
+  add_foreign_key "genres", "games"
   add_foreign_key "labels", "games"
   add_foreign_key "sc_threads", "games"
 end
